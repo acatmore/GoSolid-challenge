@@ -63,16 +63,49 @@
   		mysqli_free_result($rs_result);
 	} //run the query
  	$total_pages = ceil($total_employees / $employees_per_page);
+?>
+ <p>
+ <form action="index.php" method="Get">
+ 	Jump to page <input type="text" id="myUrl"><button>Go</button>
+ </form>
+ </p>
 
-	// echo "<a href='pagination.php?page=1'>".'|<'."</a> "; // Goto 1st page  
 
-	for ($i=1; $i<=$total_pages; $i++) { 
-            //echo "<a href='pagination.php?page=".$i."'>".$i."</a> "; 
-    	?>
-    		<a href="pagination.php?page=<?php echo $i ?>"><?php echo $i ?></a>
-    	<?php
-	}; 
-	// echo "<a href='pagination.php?page=$total_pages'>".'>|'."</a> "; // Goto last page
+<?php
+ 	$next = $page += 1;
+ 	$prev = $page -= 2;
+ 	if ($total_pages >= 1 && $page <= $total_pages) {
+ 	 	if (0 < $page) {
+ 	 		$prev_button = "<a href=\"?page=" .$prev."\">".'prev'." </a>";
+ 	 		echo $prev_button;
+ 	 	}
+ 	 	if ($total_pages - 1 > $page) {
+ 	 		$next_button = "<a href=\"?page=" .$next."\">".'next'." </a>";
+ 	 		echo $next_button;
+ 	 	}
+
+ 	}
+ ?>
+
+ <?php
+ 	// choppy pagination
+ 	// if ($total_pages >= 1 && $page <= $total_pages) {
+ 	// 	$counter = 1;
+ 	// 	$link = "";
+ 	// 	if ($page > ($employees_per_page/20)) {
+ 	// 		$link .= "<a href=\"?page=1\">1 </a> ...";
+ 	// 	}
+ 	// 	for ($x = $page; $x <= $total_pages; $x++) {
+ 	// 		if ($counter < $employees_per_page) {
+ 	// 			$link .= "<a href=\"?page=" .$x."\">".$x." </a>";
+ 	// 			$counter++;
+ 	// 		}
+ 	// 	}
+ 	// 	if ($page < $total_pages - ($employees_per_page/20)) {
+ 	// 		$link .= "..." . "<a href=\?page=" .$total_pages. "\">".$total_pages." </a>";
+ 	// 	}
+ 	// }
+ 	//echo $link
 ?>
 </body>
 </html>

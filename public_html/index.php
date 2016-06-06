@@ -24,7 +24,11 @@
 
 	//create html output of employees
 	require_once("tableView.php");
+
+	//close connection
 	$conn->close();
+
+
 
 ?>
 

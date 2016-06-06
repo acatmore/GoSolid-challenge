@@ -2,8 +2,9 @@
 <head></head>
 <body>
 <?php
-	//its possible to do this through SQL command line, 
-	//wasn't sure if you wanted that or not
+	//its easy to do this through SQL command line, 
+	//wasn't sure how literal you weere being,
+	//about a php function to generate the html table 
 
 	//load dumpfile data into table
 	$dump_file = "mysqldump.sql";
