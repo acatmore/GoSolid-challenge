@@ -2,6 +2,9 @@
 <head></head>
 <body>
 <?php
+	//its possible to do this through SQL command line, 
+	//wasn't sure if you wanted that or not
+
 	//load dumpfile data into table
 	$dump_file = "mysqldump.sql";
 	$lines = file($dump_file); //file in to an array
