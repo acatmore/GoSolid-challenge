@@ -24,60 +24,74 @@
 ?>
 <table>
 	<tr>
+		<th>Id</th>
 		<th>Employee Name</th>
 		<th>Boss Name</th>
 		<th>Distance from CEO</th>
 		<th>Subordinates</th>
 	<tr>
 <?php
+	//convert all col to html col 
+	$sql = "SELECT * FROM `employees` LIMIT $start, $employees_per_page";
+	$data = $conn->query($sql);
+	$row = $data->fetch_array(MYSQLI_ASSOC);
+
+		while ($record = $data->fetch_array(MYSQLI_ASSOC)) {
+			echo "<tr>";
+			echo "<td>" . $record['id'] . "</td>";
+			echo "<td>" . $record['name'] . "</td>";
+			echo "<td>" . $record['bossId'] . "</td>";
+			echo "</tr>";
+		}
+?>
+
+<?php
 
 	//convert names col to html col
-	$sql_names = "SELECT name FROM `employees` LIMIT $start, $employees_per_page";
-	$names_result = $conn->query($sql_names);
-	$row = $names_result->fetch_assoc();
+	// $sql_names = "SELECT name FROM `employees` LIMIT $start, $employees_per_page";
+	// $names_result = $conn->query($sql_names);
+	// $row = $names_result->fetch_array(MYSQLI_ASSOC); //make numeric?
 
-	if ($names = $conn->query($sql_names)) {
-		while ($user = $names->fetch_assoc()) {
-			foreach ($names as $row) {
+	// if ($names = $conn->query($sql_names)) {
+	// 	while ($user = $names->fetch_row()) { //make numeric?
+	// 		foreach ($names as $row) {
 				?>
 				<tr>
 					<?php
-					foreach($row as $name=>$value) {
-
-						echo "<td>$value</td> \n";
-
-					}
+					// foreach($row as $name=>$name_value) {
+					// 	echo "<td>$name_value</td> \n";
+					// }
 					?>
-				</tr>
+<!-- 				</tr> -->
 				<?php
-			}
-		}
-	}
+	// 		}
+	// 	}
+	// }
 ?>
 
 <?php
 
 	//convert bossId to boss name col
-	$sql_bosses = "SELECT boss FROM `employees` LIMIT $start, $employees_per_page";
-	$bosses_result = $conn->query($sql_bosses);
-	$row = $bosses_result->fetch_assoc();
+	// $sql_bosses = "SELECT boss FROM `employees` LIMIT $start, $employees_per_page";
+	// $bosses_result = $conn->query($sql_bosses);
+	// $row = $bosses_result->fetch_assoc();
 
-	if ($bosses = $conn->query($sql_bosses)) {
-		while ($user = $bossId->fetch_assoc()) {
-			foreach ($bossId as $row) {
+	// if ($bosses = $conn->query($sql_bosses)) {
+	// 	while ($user = $bosses->fetch_assoc()) {
+	// 		foreach ($bosses as $row) {
 				?>
 				<tr>
 					<?php
-					foreach($row as $bosses_result=>$value)
+					// foreach($row as $boss=>$value)
 
-						echo "<td>$value</td> \n";
+					// 	echo "<td>$value</td> \n";
 
 					?>
-				</tr>
+<!-- 				</tr> -->
 <?php
-			}
-		}
-	}
+	// 		}
+	// 	}
+	// }
 ?>
 
 <?php

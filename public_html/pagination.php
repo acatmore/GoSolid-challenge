@@ -1,4 +1,12 @@
 <html>
+<head>
+	<script type="text/javascript">
+	function go() {
+		var urlInput=document.getElementsByName("page");
+		window.location.href= "index.php/" +urlInput(0).value;
+	}
+	</script>
+</head
 <body>
 <?php
 	//rows per page
@@ -26,9 +34,11 @@
 	} //run the query
  	$total_pages = ceil($total_employees / $employees_per_page);
 ?>
+
  <p>
  <form action="index.php" method="Get">
- 	Jump to page <input type="text" id="myUrl"><button>Go</button>
+ 	Jump to page <input type="text" name="page" id="myUrl">
+ 	<input type= "submit" value"Go">
  </form>
  </p>
 
