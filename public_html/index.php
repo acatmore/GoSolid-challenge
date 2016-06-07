@@ -6,6 +6,8 @@
 	 <style type = "text/css">
 	   table, th, td {border: 1px solid black;};
 	 </style>
+	 <style>
+	 </style>
 
 </head>
 <body>
@@ -21,75 +23,88 @@
 	//rows per page
 	$employees_per_page = 100;
 
-	//convert all col to html col 
+	//convert sql col to html col 
 	$sql = "SELECT e.id as id, boss.id as idOfBoss, e.name as name, 
 	boss.name as boss, e.bossId as bossId, boss.bossId as idOfBossId FROM employees as e JOIN 
-	employees as boss ON e.bossId = boss.id LIMIT $employees_per_page";
+	employees as boss ON e.bossId = boss.id ";
 ?>
-<form action="index.php" method="Get">
-	Employee Name <input type="text" name="submit"value="search">
+<form method="Get">
+	Employee Name <input type="text" name="search">
 	<input type="submit" value="Go">
 </form>
 
- <form action="index.php" method="Get">
+ <form method="Get">
  	jump to page <input type="text" name="page">
  	<input type= "submit" value="Go">
  </form>
 
 <?php
-
-	 // build url with search submission
-	if (isset($_GET['search'])) {
-		$search=$_GET['search']; 
-		 //add query string search for like words
-		 $sql .=" WHERE name LIKE '%' . $mysqli->real_escape_string(trim($search)) . '%'";
-		 $result = $conn->query($sql);
-	} else {
-		echo "<p>please enter a search query</p>";
-	}
-	//build url with page number submission
-	if (isset($_GET["page"])) {
-		$page = $_GET["page"];
-		// $sql .= " WHERE "
-	} else {
-		$page=1;
-	}
-	//Requested page
-	$start = $employees_per_page * ($page -1);
-
-	//pagination
+	//pagination variables
+	$page =1;
 	$sql_employees = "SELECT * FROM `employees`"; 
+
 	if ($rs_result = mysqli_query($conn, $sql_employees)) {
 		//return number of employees
 		$total_employees = mysqli_num_rows($rs_result);  
 
 	}
+
+	// make sure the $page value is valid
+	if ($page > 0 && $page <= $total_employees)
+	{
+
+	//Requested page
+	$start = $employees_per_page * ($page -1);
+	} else {
+		$start = 1;
+	}
+
 ?>
  <table>
 	<tr class= "template">
-		<th class="template">Id</th>
+		<!-- <th class="template">Id</th> -->
 		<th class="template">Employee Name</th>
 		<th class="template">Boss Name</th>
 		<th class="template">Distance from CEO</th>
 	<tr>
 
 <?php
-	// if ($page) { 
-	// $sql .= "OFFSET $page * $employees_per_page" 
-	// }
-// if ($sql_search) { 
-// 	$sql .= 'WHERE name LIKE "%' . $sql_search . '%"'; 
-// }
+	 // build url with search submission
+	if (isset($_GET['search'])) {
+		$search = trim ($_GET['search']); 
+		 //add query string search for like words
+		 $sql .= "WHERE e.name LIKE '%" . $search . "%' ";
+		 $search_result = $conn->query($sql);
+	} 
+
+	//order by id
+	// $sql .= "ORDER BY id";
+	//build url with page number submission
+	if (isset($_GET["page"])) {
+		$page = trim ($_GET["page"]);
+		$offset = (($page - 1) * $employees_per_page);
+		$sql .= "OFFSET " .$offset. " ROWS ";
+	} else {
+		$page=1;
+	}
+
+	//only pull the number of rows you've set
+	$sql .= "LIMIT $employees_per_page";
 	$data = $conn->query($sql);
-	$row = $data->fetch_assoc();
-		while ($record = $data->fetch_assoc()) {
+		//if can't find query
+		if (!$data) {
+		    printf("Error: %s\n", mysqli_error($conn));
+		    exit();
+		}
+		while ($record = mysqli_fetch_array($data)) {
 			echo "<tr>";
-			echo "<td>" . $record['id'] . "</td>";
+			// echo "<td>" . $record['id'] . "</td>"; // id column if you want
 			echo "<td>" . $record['name'] . "</td>";
 			echo "<td>" . $record['boss'] . "</td>";
 			echo "<td>" . $record['bossId'] . "</td>";
 			echo "</tr>";
 		}
+
  //calculate $total pages
  	$total_pages = ceil($total_employees / $employees_per_page);
  	$next = $page += 1;
