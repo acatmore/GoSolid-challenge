@@ -22,8 +22,6 @@
 	//Requested page
 	$start = $employees_per_page * ($page -1);
 
-?>
-<?php
 	//pagination
 	$sql_employees = "SELECT * FROM `employees`"; 
 	if ($rs_result = mysqli_query($conn, $sql_employees)) {
@@ -35,11 +33,12 @@
 ?>
 
 <form action="index.php" method="Get">
-	Employee Name <input type="text" id="page" value="search">
+	Employee Name <input type="text" value="search">
 	<input type="submit" value="Go">
 </form>
 
 <?php
+// build query
 
 if (isset($_POST['submit'])) {
 	if (isset($_GET['go'])) {
@@ -57,6 +56,7 @@ if (isset($_POST['submit'])) {
 	}
 
 ?>
+
 
  <form action="index.php" method="Get">
  	jump to page <input type="text" name="page" value=" number 1 - 200">

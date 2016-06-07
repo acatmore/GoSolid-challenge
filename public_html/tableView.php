@@ -31,15 +31,16 @@
 	$sql = "SELECT e.id as id, boss.id as idOfBoss, e.name as name, 
 boss.name as boss, e.bossId as bossId, boss.bossId as idOfBossId FROM employees as e JOIN 
 employees as boss ON e.bossId = boss.id LIMIT $employees_per_page";
+
+
+if ($page) { 
+	$sql .= "OFFSET $pageParameter * $employees_per_page" 
+}
+if ($sql_search) { 
+	$sql .= 'WHERE name LIKE "' . $sql_search . '"'; 
+}
 	$data = $conn->query($sql);
 	$row = $data->fetch_assoc();
-	
-// if (page parameter is present) { 
-// 	$sql .= "OFFSET $pageParameter * $employees_per_page" 
-	// if (search parameter is present) { 
-	// 	$sql .= 'WHERE name LIKE "' . $searchParameter . '"'; 
-	// }
-// }
 		while ($record = $data->fetch_assoc()) {
 			echo "<tr>";
 			echo "<td>" . $record['id'] . "</td>";
