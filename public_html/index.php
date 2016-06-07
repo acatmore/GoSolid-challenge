@@ -10,6 +10,7 @@
 </head>
 <body>
 <?php
+	//database info, change for your setup
 	$dbhost = "127.0.0.1";
 	$dbuser = "myuser";
 	$dbpass = "xxxx";
@@ -108,19 +109,25 @@
  	$total_pages = ceil($total_employees / $employees_per_page);
  	$next = $page += 1;
  	$prev = $page -= 2;
- 	if ($total_pages >= 1 && $page <= $total_pages) {
- 	 	if (0 < $page) {
+ 	// if ($total_pages >= 1 && $page <= $total_pages) {
+ 			//previous page view controls
+ 	 		if (isset($_GET["search"])) {
+ 	 			$prev_button = "<a href=\"?search=" .$search."\"?page=" .$prev."\">".'prev'." </a>";
+ 	 		} else if (0 < $page){
  	 		//back one page view
  	 		$prev_button = "<a href=\"?page=" .$prev."\">".'prev'." </a>";
  	 		echo $prev_button;
- 	 	}
- 	 	if ($total_pages - 1 > $page) {
+ 	 		}
+ 	 		//next page view controls
+ 	 		if (isset($_GET["search"])) {
+ 	 			$next_button = "<a href=\"?search=" .$search."\"?page=" .$next."\">".'next'." </a>";
+ 	 		} else if ($total_pages - 1 > $page) {
  	 		//forward one page view
  	 		$next_button = "<a href=\"?page=" .$next."\">".'next'." </a>";
  	 		echo $next_button;
- 	 	}
+ 	 		}
 
- 	}
+ 	// }
 
 	//close connection
 	$conn->close();
