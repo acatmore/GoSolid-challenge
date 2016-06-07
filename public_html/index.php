@@ -6,8 +6,6 @@
 	 <style type = "text/css">
 	   table, th, td {border: 1px solid black;};
 	 </style>
-	 <style>
-	 </style>
 
 </head>
 <body>
@@ -22,11 +20,6 @@
 
 	//rows per page
 	$employees_per_page = 100;
-
-	//convert sql col to html col 
-	$sql = "SELECT e.id as id, boss.id as idOfBoss, e.name as name, 
-	boss.name as boss, e.bossId as bossId, boss.bossId as idOfBossId FROM employees as e JOIN 
-	employees as boss ON e.bossId = boss.id ";
 ?>
 <form method="Get">
 	Employee Name <input type="text" name="search">
@@ -58,7 +51,6 @@
 	} else {
 		$start = 1;
 	}
-
 ?>
  <table>
 	<tr class= "template">
@@ -67,9 +59,13 @@
 		<th class="template">Boss Name</th>
 		<th class="template">Distance from CEO</th>
 	<tr>
-
 <?php
-	 // build url with search submission
+	//convert sql col to html col 
+	$sql = "SELECT e.id as id, boss.id as idOfBoss, e.name as name, 
+	boss.name as boss, e.bossId as bossId, boss.bossId as idOfBossId FROM employees as e JOIN 
+	employees as boss ON e.bossId = boss.id ";
+
+	// build url with search submission
 	if (isset($_GET['search'])) {
 		$search = trim ($_GET['search']); 
 		 //add query string search for like words
@@ -77,19 +73,22 @@
 		 $search_result = $conn->query($sql);
 	} 
 
+	//if order is needed to be set
 	//order by id
 	// $sql .= "ORDER BY id";
+
+	//only pull the number of rows you've set
+	$sql .= "LIMIT $employees_per_page ";
+
 	//build url with page number submission
-	if (isset($_GET["page"])) {
+	if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
 		$page = trim ($_GET["page"]);
 		$offset = (($page - 1) * $employees_per_page);
-		$sql .= "OFFSET " .$offset. " ROWS ";
+		$sql .= "OFFSET " .$offset. " ";
 	} else {
 		$page=1;
 	}
 
-	//only pull the number of rows you've set
-	$sql .= "LIMIT $employees_per_page";
 	$data = $conn->query($sql);
 		//if can't find query
 		if (!$data) {
