@@ -20,9 +20,6 @@
 	//pagination
 	require_once("pagination.php");
 
-	//add subordinates
-	require_once("subordinatesCol.php");
-
 	//create html output of employees
 	require_once("tableView.php");
 

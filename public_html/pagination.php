@@ -20,7 +20,7 @@
 		$page=1;
 	}
 	//Requested page
-	$start = $employees_per_page * ($page - 1);
+	$start = $employees_per_page * ($page -1);
 
 ?>
 <?php
@@ -29,18 +29,39 @@
 	if ($rs_result = mysqli_query($conn, $sql_employees)) {
 		//return number of employees
 		$total_employees = mysqli_num_rows($rs_result);  
-		// Free result set
-  		mysqli_free_result($rs_result);
+
 	} //run the query
  	$total_pages = ceil($total_employees / $employees_per_page);
 ?>
 
- <p>
+<form action="index.php" method="Get">
+	Employee Name <input type="text" id="page" value="search">
+	<input type="submit" value="Go">
+</form>
+
+<?php
+
+if (isset($_POST['submit'])) {
+	if (isset($_GET['go'])) {
+		if(preg_match("/[A-Z  | a-z]+/", $_POST['name'])){ 
+	  		$name=$_POST['name']; 
+	  		$conn;
+	  		//query table for similar words
+	  		$sql_search="SELECT name FROM emplpyees 
+	  		WHERE  name LIKE '%' . $name . '%'";
+	  		$result = $conn->query($sql_search);
+		}
+	} else {
+	echo "<p>please enter a search query</p>";
+		}
+	}
+
+?>
+
  <form action="index.php" method="Get">
- 	Jump to page <input type="text" name="page" id="myUrl">
- 	<input type= "submit" value"Go">
+ 	jump to page <input type="text" name="page" value=" number 1 - 200">
+ 	<input type= "submit" value="Go">
  </form>
- </p>
 
 
 <?php
