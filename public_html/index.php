@@ -19,8 +19,6 @@
 	// Create connection
 	$conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 
-	//rows per page
-	$employees_per_page = 100;
 ?>
 <form method="Get">
 	Employee Name <input type="text" name="search">
@@ -34,6 +32,7 @@
 
 <?php
 	//pagination variables
+	$employees_per_page = 100;
 	$page =1;
 	$sql_employees = "SELECT * FROM `employees`"; 
 
@@ -43,15 +42,8 @@
 
 	}
 
-	// make sure the $page value is valid
-	if ($page > 0 && $page <= $total_employees)
-	{
-
-	//Requested page
-	$start = $employees_per_page * ($page -1);
-	} else {
-		$start = 1;
-	}
+	 //calculate $total pages
+ 	$total_pages = ceil($total_employees / $employees_per_page);
 ?>
  <table>
 	<tr class= "template">
@@ -66,7 +58,7 @@
 	boss.name as boss, e.bossId as bossId, boss.bossId as idOfBossId FROM employees as e JOIN 
 	employees as boss ON e.bossId = boss.id ";
 
-	// build url with search submission
+	//url of search submission turned into sql query
 	if (isset($_GET['search'])) {
 		$search = trim ($_GET['search']); 
 		 //add query string search for like words
@@ -74,14 +66,14 @@
 		 $search_result = $conn->query($sql);
 	} 
 
-	//if order is needed to be set
-	//order by id
+	// if order is needed to be set
+	// order by id
 	// $sql .= "ORDER BY id";
 
 	//only pull the number of rows you've set
 	$sql .= "LIMIT $employees_per_page ";
 
-	//build url with page number submission
+	//url of page submission turned into query
 	if (isset($_GET["page"]) && is_numeric($_GET["page"])) {
 		$page = trim ($_GET["page"]);
 		$offset = (($page - 1) * $employees_per_page);
@@ -89,6 +81,8 @@
 	} else {
 		$page=1;
 	}
+
+	/* while ($i = 1; $i) */
 
 	$data = $conn->query($sql);
 		//if can't find query
@@ -101,12 +95,19 @@
 			// echo "<td>" . $record['id'] . "</td>"; // id column if you want
 			echo "<td>" . $record['name'] . "</td>";
 			echo "<td>" . $record['boss'] . "</td>";
-			echo "<td>" . $record['bossId'] . "</td>";
+
+			$current_boss = $record['bossId'];
+			$distance_to_ceo = 0;
+
+			while ($current_boss['id'] != "1" ) {
+				 $current_employee = "SELECT id FROM employees WHERE bossId =" . $current_boss['id'] . " ";
+				 $current_boss = $conn->query($current_employee);
+				$distance_to_ceo += 1;
+				echo "<td>" . $distance_to_ceo . "</td>";
+			}
 			echo "</tr>";
 		}
 
- //calculate $total pages
- 	$total_pages = ceil($total_employees / $employees_per_page);
  	$next = $page += 1;
  	$prev = $page -= 2;
  	// if ($total_pages >= 1 && $page <= $total_pages) {
